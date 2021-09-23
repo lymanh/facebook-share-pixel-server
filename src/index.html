@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta http-equiv="content-type" content="text/html" />
+    <meta name="author" content="iljimae" />
+    <title>Tool share pixel bm</title>
+    <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.3.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body class="container">
+    <br />
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h4 class="panel-title">Tool share pixel bm</h4>
+        </div>
+        <div class="panel-body">
+          <div class="form-group col-md-6 col-md-offset-1">
+            <label for="tokens">ID TKQC:</label>
+            <input id="id_tkqc" class="form-control" value="" />
+          </div>
+
+          <div class="form-group col-md-4" style="margin-top: 25px">
+            <button type="submit" class="btn btn-success" id="add_tkqc">Thêm Tkqc</button>
+            <button type="submit" class="btn btn-primary" id="share_pixel">Share pixel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <label for="times">Logs: </label>
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <div class="form-group col-sm-12">
+            <p class="alert alert-info logs" style="overflow: hidden; height: 160px">
+              <b id="noti"></b>
+            </p>
+          </div>
+          <div class="form-group col-sm-6">
+            <textarea id="result1" class="form-control" cols="30" rows="7"></textarea>
+          </div>
+          <div class="form-group col-sm-6">
+            <textarea id="result2" class="form-control" cols="30" rows="7"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script lang="ts">
+    $(document).ready(function () {
+      $('#add_tkqc').on('click', function () {
+        const dt = new Date()
+        const time = dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()
+
+        axios
+          .get(`https://facebook-share-pixel.herokuapp.com/addTkqc`)
+          .then(response => $('#noti').prepend(`<pre>${'[' + time + ' AM] '}<span style="color:green;">thêm tkqc thành công</span></pre>`))
+          .catch(err => $('#noti').prepend(`<pre>${'[' + time + ' AM] '}<span style="color:red;">thêm tkqc lỗi</span></pre>`))
+      })
+
+      $('#share_pixel').on('click', function () {
+        const id_tkqc = $('#id_tkqc').val()
+
+        const dt = new Date()
+        const time = dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()
+
+        if (!id_tkqc) {
+          alert('Nhập vào ID Tài Khoản Quảng Cáo !')
+          return
+        }
+
+        axios
+          .get(`https://facebook-share-pixel.herokuapp.com/sharePixel/${id_tkqc}`)
+          .then(response => $('#noti').prepend(`<pre>${'[' + time + ' AM] '}<span style="color:green;">share pixel thành công</span></pre>`))
+          .catch(err => $('#noti').prepend(`<pre>${'[' + time + ' AM] '}<span style="color:red;">share pixel lỗi</span></pre>`))
+      })
+    })
+  </script>
+</html>

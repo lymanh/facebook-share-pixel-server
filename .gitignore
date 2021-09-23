@@ -1,0 +1,6 @@
+node_modules/
+static/*
+dist/
+yarn-error.log
+src/test*.ts
+.env
